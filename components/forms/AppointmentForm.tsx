@@ -42,7 +42,9 @@ const AppointmentForm = ({
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof AppointmentFormValidation>) {
+  const onSubmit = async (
+    values: z.infer<typeof AppointmentFormValidation>
+  ) => {
     setIsLoading(true);
 
     let status;
@@ -60,7 +62,7 @@ const AppointmentForm = ({
 
     try {
       if (type === "create" && patientId) {
-        const appointmentData = {
+        const appointment = {
           userId,
           patient: patientId,
           primaryPhysician: values.primaryPhysician,
@@ -70,13 +72,13 @@ const AppointmentForm = ({
           status: status as Status,
         };
 
-        const appointment = await createAppointment(appointmentData);
+        const newAppointment = await createAppointment(appointment);
 
-        console.log(appointmentData);
+        console.log(appointment);
         if (appointment) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.id}`
           );
         }
       }
@@ -85,7 +87,7 @@ const AppointmentForm = ({
     }
 
     setIsLoading(false);
-  }
+  };
 
   let buttonLabel;
 
